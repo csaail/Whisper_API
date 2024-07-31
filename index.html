@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whisper JAX</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Drona Aviation's Transcription and Translation Interface⚡️</h1>
+            <p>Whisper JAX is an optimized implementation of the Whisper model by OpenAI. It runs on JAX with a TPU v4-8 in the backend. Compared to PyTorch on an A100 GPU, it is over 70x faster, making it the fastest Whisper API available.</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab(event, 'Microphone')">Microphone</button>
+            <button class="tab-button" onclick="openTab(event, 'AudioFile')">Audio File</button>
+            <button class="tab-button" onclick="openTab(event, 'YouTube')">YouTube</button>
+        </div>
+        
+        <div id="Microphone" class="tab-content active">
+            <form>
+                <label for="microphone">Record Audio:</label>
+                <input type="file" id="microphone" accept="audio/*">
+                <label for="task">Task:</label>
+                <select id="task">
+                    <option value="transcribe">Transcribe</option>
+                    <option value="translate">Translate</option>
+                </select>
+                <label for="timestamps">
+                    <input type="checkbox" id="timestamps"> Return timestamps
+                </label>
+                <button type="button" onclick="transcribe('microphone')">Submit</button>
+            </form>
+            <div id="microphone-result" class="result"></div>
+        </div>
+        
+        <div id="AudioFile" class="tab-content">
+            <form>
+                <label for="audiofile">Upload Audio File:</label>
+                <input type="file" id="audiofile" accept="audio/*">
+                <label for="task">Task:</label>
+                <select id="task">
+                    <option value="transcribe">Transcribe</option>
+                    <option value="translate">Translate</option>
+                </select>
+                <label for="timestamps">
+                    <input type="checkbox" id="timestamps"> Return timestamps
+                </label>
+                <button type="button" onclick="transcribe('audiofile')">Submit</button>
+            </form>
+            <div id="audiofile-result" class="result"></div>
+        </div>
+        
+        <div id="YouTube" class="tab-content">
+            <form>
+                <label for="youtube-url">YouTube URL:</label>
+                <input type="text" id="youtube-url" placeholder="Paste the URL to a YouTube video here">
+                <label for="task">Task:</label>
+                <select id="task">
+                    <option value="transcribe">Transcribe</option>
+                    <option value="translate">Translate</option>
+                </select>
+                <label for="timestamps">
+                    <input type="checkbox" id="timestamps"> Return timestamps
+                </label>
+                <button type="button" onclick="transcribe('youtube')">Submit</button>
+            </form>
+            <div id="youtube-result" class="result"></div>
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
