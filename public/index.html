@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MP3 Transcription</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        button {
+            padding: 10px;
+            margin-top: 20px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #uploadStatus {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Upload your MP3 for Transcription</h1>
+    <input type="file" id="fileInput" accept=".mp3" multiple>
+    <button onclick="uploadFiles()">Upload</button>
+    <div id="uploadStatus"></div>
+
+    <script>
+        function uploadFiles() {
+            const files = document.getElementById('fileInput').files;
+            const formData = new FormData();
+            for (let i = 0; i < files.length; i++) {
+                formData.append("files", files[i]);
+            }
+
+            document.getElementById('uploadStatus').innerHTML = '<p>Uploading...</p>';
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response =>{ 
+                return response.json()})
+            .then(data => {
+                console.log(data)
+                document.getElementById('uploadStatus').innerHTML = '';
+                data.forEach((item, index) => {
+                    const transcriptionDiv = document.createElement('div');
+                    transcriptionDiv.innerHTML = `<p>Transcription ${index + 1}: ${item.transcription}</p>`;
+                    document.getElementById('uploadStatus').appendChild(transcriptionDiv);
+                    const translateButton = document.createElement('button');
+                    translateButton.innerText = 'Translate';
+                    translateButton.onclick = () => translateText(item.transcription);
+                    transcriptionDiv.appendChild(translateButton);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('uploadStatus').innerHTML = '<p>Error uploading files. See console for details.</p>';
+            });
+        }
+
+        function translateText(text) {
+            // Implement translation API call or handle client-side translation here
+            console.log('Translate:', text);
+        }
+    </script>
+</body>
+</html>
